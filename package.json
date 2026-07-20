@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "next": "16.2.10",
-    "nodemon": "^3.1.14",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-hook-form": "^7.82.0",
     "sweetalert2": "^11.26.25"
   },
   "devDependencies": {
