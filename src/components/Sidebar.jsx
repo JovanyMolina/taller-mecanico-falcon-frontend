@@ -24,7 +24,7 @@ export default function Sidebar() {
     <aside className="hidden w-60 shrink-0 flex-col bg-[#1C1B1A] lg:flex">
       <div className="px-6 py-6">
         <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#F5A623]">Taller</span>
-        <p className="text-lg font-bold text-white">Falcon</p>
+        <p className="text-lg font-bold text-white">FALCON</p>
       </div>
 
       <nav className="flex-1 space-y-1 px-3">

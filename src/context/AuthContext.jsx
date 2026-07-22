@@ -11,8 +11,6 @@ const STORAGE_KEY_USUARIO = 'taller_motos_usuario';
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
-  // Empieza en true: al cargar la página necesitamos leer localStorage antes
-  // de saber si hay sesión o no. Mientras tanto, RutaProtegida no debe redirigir.
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
