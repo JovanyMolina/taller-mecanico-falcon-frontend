@@ -5,8 +5,6 @@ import { Search, ChevronDown } from 'lucide-react';
 import motocicletaService from '../services/motocicleta.service';
 import { useDebounce } from '../hooks/useDebounce';
 
-// value: moto_id actual (o null). onChange(motoId): notifica la selección.
-// nombreInicial: texto para precargar en modo edición sin pedir de nuevo al backend.
 export default function SelectorMoto({ value, nombreInicial, onChange }) {
   const [texto, setTexto] = useState(nombreInicial || '');
   const [resultados, setResultados] = useState([]);

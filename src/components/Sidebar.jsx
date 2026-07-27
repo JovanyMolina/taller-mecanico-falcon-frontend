@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Bike, FileText, Wrench, UserCog } from 'lucide-react';
+import { LayoutDashboard, Users, Bike, Calendar, FileText, Wrench, UserCog } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/clientes', label: 'Clientes', icon: Users },
   { href: '/motos', label: 'Motos', icon: Bike },
+  { href: '/agenda', label: 'Agenda', icon: Calendar },
   { href: '/cotizaciones', label: 'Cotizaciones', icon: FileText },
   { href: '/ordenes', label: 'Órdenes', icon: Wrench },
   { href: '/usuarios', label: 'Usuarios', icon: UserCog, soloAdmin: true },
@@ -24,7 +25,7 @@ export default function Sidebar() {
     <aside className="hidden w-60 shrink-0 flex-col bg-[#1C1B1A] lg:flex">
       <div className="px-6 py-6">
         <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#F5A623]">Taller</span>
-        <p className="text-lg font-bold text-white">FALCON</p>
+        <p className="text-lg font-bold text-white">Falcon</p>
       </div>
 
       <nav className="flex-1 space-y-1 px-3">

@@ -11,6 +11,7 @@ export default function ClientesPage() {
   const [clientes, setClientes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('');
   const busquedaDebounced = useDebounce(busqueda, 300);
 
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -20,14 +21,14 @@ export default function ClientesPage() {
   const cargarClientes = useCallback(async () => {
     setCargando(true);
     try {
-      const data = await clienteService.listar(busquedaDebounced);
+      const data = await clienteService.listar(busquedaDebounced, filtroEstado);
       setClientes(data);
     } catch (error) {
       Swal.fire({ icon: 'error', title: 'No se pudo cargar la lista', text: error.message });
     } finally {
       setCargando(false);
     }
-  }, [busquedaDebounced]);
+  }, [busquedaDebounced, filtroEstado]);
 
   useEffect(() => {
     cargarClientes();
@@ -110,9 +111,19 @@ export default function ClientesPage() {
           placeholder="Buscar por nombre, teléfono o email..."
           className="w-full rounded-md border border-neutral-300 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
         />
+        <select
+          value={filtroEstado}
+          onChange={(e) => setFiltroEstado(e.target.value)}
+          className="rounded-md border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+        >
+          <option value="">Todos los estados</option>
+          <option value="Activo">Activo</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white">
+      <div className="mt-6 rounded-lg border border-neutral-200 bg-white">
+        <div className="max-h-[600px] overflow-y-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wide text-neutral-500">
@@ -179,6 +190,7 @@ export default function ClientesPage() {
               ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {modalAbierto && (
