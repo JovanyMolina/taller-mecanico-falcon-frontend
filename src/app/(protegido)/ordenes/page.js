@@ -181,7 +181,8 @@ export default function OrdenesPage() {
         </select>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white">
+      <div className="mt-6 rounded-lg border border-neutral-200 bg-white">
+        <div className="max-h-[600px] overflow-y-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wide text-neutral-500">
@@ -253,6 +254,7 @@ export default function OrdenesPage() {
               ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {modalAbierto && (

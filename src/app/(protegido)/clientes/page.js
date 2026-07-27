@@ -103,7 +103,8 @@ export default function ClientesPage() {
         </button>
       </div>
 
-      <div className="relative mt-6 max-w-sm">
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="relative max-w-sm flex-1">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
         <input
           value={busqueda}
@@ -111,6 +112,7 @@ export default function ClientesPage() {
           placeholder="Buscar por nombre, teléfono o email..."
           className="w-full rounded-md border border-neutral-300 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
         />
+        </div>
         <select
           value={filtroEstado}
           onChange={(e) => setFiltroEstado(e.target.value)}
