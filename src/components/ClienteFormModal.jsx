@@ -59,6 +59,8 @@ export default function ClienteFormModal({ cliente, onGuardar, onCerrar, guardan
               {...register('telefono', {
                 required: 'El teléfono es obligatorio',
                 minLength: { value: 10, message: 'Debe tener al menos 10 dígitos' },
+                maxLength: { value: 10, message: 'Debe tener como máximo 10 dígitos' },
+                pattern:{ value: /^[0-9]+$/, message: 'El teléfono debe contener solo números' }
               })}
             />
             {errors.telefono && <p className="mt-1 text-xs text-red-600">{errors.telefono.message}</p>}

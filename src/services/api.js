@@ -1,4 +1,5 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const API_ORIGIN = API_URL.replace(/\/api\/?$/, '');
 
 function obtenerToken() {
   if (typeof window === 'undefined') return null; 
@@ -29,6 +30,20 @@ const api = {
   post: (path, body) => apiFetch(path, { method: 'POST', body: JSON.stringify(body) }),
   put: (path, body) => apiFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
   patch: (path, body) => apiFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (path) => apiFetch(path, { method: 'DELETE' }),
+  postFormData: async (path, formData) => {
+    const token = obtenerToken();
+    const response = await fetch(`${API_URL}${path}`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    });
+    const data = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(data?.message || 'Ocurrió un error inesperado');
+    }
+    return data;
+  },
 };
 
 export default api;

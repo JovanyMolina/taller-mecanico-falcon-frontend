@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Swal from 'sweetalert2';
-import { Search, Plus, Pencil, Eye, Check, X as XIcon } from 'lucide-react';
+import Link from 'next/link';
+import { Search, Plus, Pencil, Eye, Check, X as XIcon, Printer } from 'lucide-react';
 import cotizacionService from '../../../services/cotizacion.service';
 import { useDebounce } from '../../../hooks/useDebounce';
 import CotizacionFormModal from '../../../components/CotizacionFormModal';
@@ -152,8 +153,7 @@ export default function CotizacionesPage() {
         </select>
       </div>
 
-      <div className="mt-6 rounded-lg border border-neutral-200 bg-white">
-        <div className="max-h-[600px] overflow-y-auto">
+      <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wide text-neutral-500">
@@ -201,6 +201,14 @@ export default function CotizacionesPage() {
                   <td className="px-4 py-3 text-neutral-500">{cotizacion.creado_por_nombre}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
+                      <Link
+                        href={`/cotizaciones/${cotizacion.id}/imprimir`}
+                        className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-100 hover:text-[#1C1B1A]"
+                        title="Imprimir"
+                      >
+                        <Printer size={16} />
+                      </Link>
+
                       {cotizacion.estado === 'pendiente' ? (
                         <>
                           <button
@@ -240,7 +248,6 @@ export default function CotizacionesPage() {
               ))}
           </tbody>
         </table>
-        </div>
       </div>
 
       {modalAbierto && (

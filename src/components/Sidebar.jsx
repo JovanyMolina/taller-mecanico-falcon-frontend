@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Bike, Calendar, FileText, Wrench, UserCog } from 'lucide-react';
+import { LayoutDashboard, Users, Bike, Calendar, FileText, Wrench, UserCog, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: '/cotizaciones', label: 'Cotizaciones', icon: FileText },
   { href: '/ordenes', label: 'Órdenes', icon: Wrench },
   { href: '/usuarios', label: 'Usuarios', icon: UserCog, soloAdmin: true },
+  { href: '/configuracion', label: 'Configuración', icon: Settings, soloAdmin: true },
 ];
 
 export default function Sidebar() {
@@ -22,7 +23,7 @@ export default function Sidebar() {
   const items = NAV_ITEMS.filter((item) => !item.soloAdmin || usuario?.rol === 'admin');
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col bg-[#1C1B1A] lg:flex">
+    <aside className="no-imprimir hidden w-60 shrink-0 flex-col bg-[#1C1B1A] lg:flex">
       <div className="px-6 py-6">
         <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#F5A623]">Taller</span>
         <p className="text-lg font-bold text-white">Falcon</p>

@@ -52,7 +52,7 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
     });
   }, [cotizacion, reset]);
 
- 
+  
   const itemsEnVivo = watch('items');
   const total = (itemsEnVivo || []).reduce((acc, item) => {
     const cantidad = Number(item.cantidad) || 0;

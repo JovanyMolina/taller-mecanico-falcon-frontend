@@ -9,3 +9,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@media print {
+  .no-imprimir {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+}

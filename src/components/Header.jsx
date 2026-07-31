@@ -7,7 +7,7 @@ export default function Header() {
   const { usuario, logout } = useAuth();
 
   return (
-    <header className="flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4 lg:px-8">
+    <header className="no-imprimir flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4 lg:px-8">
       <div className="lg:hidden">
         <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#B4650F]">
           Taller Motos
