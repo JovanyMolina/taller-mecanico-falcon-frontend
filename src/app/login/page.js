@@ -4,12 +4,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [enviando, setEnviando] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const {
     register,
@@ -108,14 +110,25 @@ export default function LoginPage() {
               <label htmlFor="password" className="text-sm font-medium text-[#1C1B1A]">
                 Contraseña
               </label>
-              <input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                className="mt-1.5 w-full rounded-md border border-neutral-300 px-3 py-2.5 text-sm outline-none transition focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
-                placeholder="••••••••"
-                {...register('password', { required: 'La contraseña es obligatoria' })}
-              />
+              <div className="relative mt-1.5">
+                <input
+                  id="password"
+                  type={mostrarPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2.5 pr-10 text-sm outline-none transition focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+                  placeholder="••••••••"
+                  {...register('password', { required: 'La contraseña es obligatoria' })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setMostrarPassword((actual) => !actual)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+                  tabIndex={-1}
+                  aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                >
+                  {mostrarPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="mt-1.5 text-xs text-red-600">{errors.password.message}</p>
               )}
