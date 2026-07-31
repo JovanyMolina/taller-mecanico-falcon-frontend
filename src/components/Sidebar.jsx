@@ -23,13 +23,12 @@ export default function Sidebar() {
   const items = NAV_ITEMS.filter((item) => !item.soloAdmin || usuario?.rol === 'admin');
 
   return (
-    <aside className="no-imprimir hidden w-60 shrink-0 flex-col bg-[#1C1B1A] lg:flex">
-      <div className="px-6 py-6">
-        <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#F5A623]">Taller</span>
-        <p className="text-lg font-bold text-white">Falcon</p>
+    <aside  className="hidden w-60 shrink-0 flex-col gap-3 bg-[#1C1B1A] lg:flex">
+      <div className="flex justify-center pt-4">
+        <img src="/Falcon.webp" alt="Taller Motos Falcon"  className="h-40 w-auto object-contain" />
       </div>
 
-      <nav className="flex-1 space-y-1 px-3">
+      <nav className="flex-1 px-3 space-y-1">
         {items.map(({ href, label, icon: Icon }) => {
           const activo = pathname.startsWith(href);
           return (

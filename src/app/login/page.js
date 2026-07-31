@@ -38,24 +38,42 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Panel izquierdo: identidad, oculto en mobile */}
       <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-[#1C1B1A] px-14 py-12 lg:flex">
-        <div>
+      {/* marca de agua para el fondo */}
+       {/*  <div className="absolute inset-0 z-0">
+          <img
+            src="/Falcon.webp"
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover opacity-10"
+          />
+        </div> */}
+        <img
+          src="/Falcon.webp"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 h-[36rem] w-[36rem] rotate-12 object-contain opacity-[0.06]"
+        />
+
+        <div className="relative">
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#F5A623]">
             Sistema interno
           </span>
-          <h1 className="mt-6 text-5xl font-bold leading-[1.05] text-white">
-            Taller
-            <br />
-            Motos
-          </h1>
+          <div className="mt-6 flex items-center gap-4">
+            <img src="/Falcon.webp" alt="Taller Motos Falcon" className="h-16 w-16 object-contain" />
+            <h1 className="text-4xl font-bold leading-[1.05] text-white">
+              Taller
+              <br />
+              Motos
+            </h1>
+          </div>
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/50">
             Recepción, cotizaciones y órdenes de servicio en un solo lugar —
             del ingreso de la moto hasta la entrega al cliente.
           </p>
         </div>
 
-        <div>
+        <div className="relative">
           <div className="flex gap-1.5">
             {Array.from({ length: 24 }).map((_, i) => (
               <div
@@ -71,7 +89,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Panel derecho: formulario */}
       <div className="flex w-full flex-col justify-center px-6 sm:px-16 lg:w-1/2">
         <div className="mx-auto w-full max-w-sm">
           <div className="mb-10 lg:hidden">
