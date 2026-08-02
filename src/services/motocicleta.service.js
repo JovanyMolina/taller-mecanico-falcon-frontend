@@ -1,7 +1,11 @@
 import api from './api';
 
-async function listar(busqueda) {
-  const query = busqueda ? `?q=${encodeURIComponent(busqueda)}` : '';
+async function listar(busqueda, estado) {
+  const params = new URLSearchParams();
+  if (busqueda) params.append('q', busqueda);
+  if (estado) params.append('estado', estado);
+  const query = params.toString() ? `?${params.toString()}` : '';
+
   const respuesta = await api.get(`/motocicletas${query}`);
   return respuesta.data;
 }

@@ -35,6 +35,7 @@ export default function MotosPage() {
   const [motos, setMotos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('');
   const busquedaDebounced = useDebounce(busqueda, 300);
 
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -44,14 +45,14 @@ export default function MotosPage() {
   const cargarMotos = useCallback(async () => {
     setCargando(true);
     try {
-      const data = await motocicletaService.listar(busquedaDebounced);
+      const data = await motocicletaService.listar(busquedaDebounced, filtroEstado);
       setMotos(data);
     } catch (error) {
       Swal.fire({ icon: 'error', title: 'No se pudo cargar la lista', text: error.message });
     } finally {
       setCargando(false);
     }
-  }, [busquedaDebounced]);
+  }, [busquedaDebounced, filtroEstado]);
 
   useEffect(() => {
     cargarMotos();
@@ -148,18 +149,32 @@ export default function MotosPage() {
         </button>
       </div>
 
-      <div className="relative mt-6 max-w-sm">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-        <input
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          placeholder="Buscar por placa, cliente o teléfono..."
-          className="w-full rounded-md border border-neutral-300 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
-        />
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="relative max-w-sm flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <input
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Buscar por placa, cliente o teléfono..."
+            className="w-full rounded-md border border-neutral-300 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+          />
+        </div>
+
+        <select
+          value={filtroEstado}
+          onChange={(e) => setFiltroEstado(e.target.value)}
+          className="rounded-md border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+        >
+          <option value="">Todos los estados</option>
+          {Object.entries(ESTADO_LABEL).map(([valor, etiqueta]) => (
+            <option key={valor} value={valor}>
+              {etiqueta}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div className="mt-6 rounded-lg border border-neutral-200 bg-white">
-        <div className="max-h-[600px] overflow-y-auto">
+      <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wide text-neutral-500">
@@ -246,7 +261,6 @@ export default function MotosPage() {
               ))}
           </tbody>
         </table>
-        </div>
       </div>
 
       {modalAbierto && (
