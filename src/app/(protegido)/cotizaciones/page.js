@@ -162,6 +162,7 @@ export default function CotizacionesPage() {
               <th className="px-4 py-3 font-medium">Total</th>
               <th className="px-4 py-3 font-medium">Estado</th>
               <th className="px-4 py-3 font-medium">Creada por</th>
+              <th className="px-4 py-3 font-medium">Creada el</th>
               <th className="px-4 py-3 font-medium text-right">Acciones</th>
             </tr>
           </thead>
@@ -199,6 +200,7 @@ export default function CotizacionesPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-neutral-500">{cotizacion.creado_por_nombre}</td>
+                  <td className="px-4 py-3 text-neutral-500">{cotizacion.created_at}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       <Link

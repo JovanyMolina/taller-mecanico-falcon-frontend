@@ -154,7 +154,7 @@ export default function ImprimirCotizacionPage() {
           </div>
         </div>
 
-        <p className="mt-10 text-center text-xs text-neutral-400">
+        <p className="no-imprimir mt-10 text-center text-xs text-neutral-400">
           Cotización generada por {cotizacion.creado_por_nombre} — {negocio.nombre}
         </p>
       </div>

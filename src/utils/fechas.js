@@ -2,7 +2,7 @@ export const DIAS_SEMANA = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'
 
 export function obtenerLunes(fecha) {
   const d = new Date(fecha);
-  const dia = d.getDay(); // 0 = domingo ... 6 = sábado
+  const dia = d.getDay(); 
   const diff = dia === 0 ? -6 : 1 - dia;
   d.setDate(d.getDate() + diff);
   d.setHours(0, 0, 0, 0);
@@ -15,8 +15,6 @@ export function sumarDias(fecha, n) {
   return d;
 }
 
-// Evita toISOString(): convierte a UTC y puede recorrer la fecha un día
-// dependiendo de la zona horaria. Esto usa los componentes locales directo.
 export function formatearISO(fecha) {
   const y = fecha.getFullYear();
   const m = String(fecha.getMonth() + 1).padStart(2, '0');
@@ -26,4 +24,12 @@ export function formatearISO(fecha) {
 
 export function generarDiasSemana(lunes) {
   return Array.from({ length: 7 }, (_, i) => sumarDias(lunes, i));
+}
+
+export function esDomingo(fecha) {
+  if (typeof fecha === 'string') {
+    const [y, m, d] = fecha.split('-').map(Number);
+    return new Date(y, m - 1, d).getDay() === 0;
+  }
+  return fecha.getDay() === 0;
 }

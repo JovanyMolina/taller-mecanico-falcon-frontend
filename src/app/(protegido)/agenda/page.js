@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Swal from 'sweetalert2';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import citaService from '../../../services/cita.service';
+import configuracionService from '../../../services/configuracion.service';
 import CitaFormModal from '../../../components/CitaFormModal';
 import {
   obtenerLunes,
@@ -38,11 +39,19 @@ export default function AgendaPage() {
   const [lunes, setLunes] = useState(() => obtenerLunes(new Date()));
   const [citas, setCitas] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [trabajaDomingos, setTrabajaDomingos] = useState(true); 
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [citaEditando, setCitaEditando] = useState(null);
   const [fechaParaNueva, setFechaParaNueva] = useState(null);
   const [guardando, setGuardando] = useState(false);
+
+  useEffect(() => {
+    configuracionService
+      .obtener()
+      .then((config) => setTrabajaDomingos(Boolean(config.trabaja_domingos)))
+      .catch(() => setTrabajaDomingos(true)); 
+  }, []);
 
   const dias = generarDiasSemana(lunes);
   const domingo = dias[6];
@@ -60,7 +69,6 @@ export default function AgendaPage() {
     } finally {
       setCargando(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lunes]);
 
   useEffect(() => {
@@ -235,13 +243,17 @@ export default function AgendaPage() {
                     </div>
                   ))}
 
-                  <button
-                    onClick={() => abrirModalNueva(dia)}
-                    className="flex w-full items-center justify-center gap-1 rounded-md border border-dashed border-neutral-300 py-2 text-xs text-neutral-400 transition hover:border-[#1C1B1A] hover:text-[#1C1B1A]"
-                  >
-                    <Plus size={12} />
-                    Agendar
-                  </button>
+                  {index === 6 && !trabajaDomingos ? (
+                    <p className="py-2 text-center text-xs text-neutral-400">Cerrado los domingos</p>
+                  ) : (
+                    <button
+                      onClick={() => abrirModalNueva(dia)}
+                      className="flex w-full items-center justify-center gap-1 rounded-md border border-dashed border-neutral-300 py-2 text-xs text-neutral-400 transition hover:border-[#1C1B1A] hover:text-[#1C1B1A]"
+                    >
+                      <Plus size={12} />
+                      Agendar
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -253,6 +265,7 @@ export default function AgendaPage() {
         <CitaFormModal
           cita={citaEditando}
           fechaInicial={fechaParaNueva}
+          trabajaDomingos={trabajaDomingos}
           onGuardar={guardarCita}
           onCerrar={() => setModalAbierto(false)}
           guardando={guardando}

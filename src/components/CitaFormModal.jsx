@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 import SelectorCliente from './SelectorCliente';
 import SelectorMoto from './SelectorMoto';
 
-export default function CitaFormModal({ cita, fechaInicial, onGuardar, onCerrar, guardando }) {
+export default function CitaFormModal({ cita, fechaInicial, trabajaDomingos, onGuardar, onCerrar, guardando }) {
   const esEdicion = Boolean(cita);
 
   const {
@@ -102,7 +102,14 @@ export default function CitaFormModal({ cita, fechaInicial, onGuardar, onCerrar,
               <input
                 type="date"
                 className="mt-1.5 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
-                {...register('fecha', { required: 'La fecha es obligatoria' })}
+                {...register('fecha', {
+                  required: 'La fecha es obligatoria',
+                  validate: (value) => {
+                    if (trabajaDomingos) return true;
+                    const esDomingo = new Date(value).getUTCDay() === 0;
+                    return !esDomingo || 'El taller no labora los domingos';
+                  },
+                })}
               />
               {errors.fecha && <p className="mt-1 text-xs text-red-600">{errors.fecha.message}</p>}
             </div>

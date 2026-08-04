@@ -31,6 +31,7 @@ export default function ConfiguracionPage() {
         direccion: data.direccion || '',
         telefono: data.telefono || '',
         email: data.email || '',
+        trabaja_domingos: Boolean(data.trabaja_domingos),
       });
     } catch (error) {
       Swal.fire({ icon: 'error', title: 'No se pudo cargar la configuración', text: error.message });
@@ -162,6 +163,21 @@ export default function ConfiguracionPage() {
                 {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
               </div>
             </div>
+          </div>
+
+          <div className="mt-6 border-t border-neutral-200 pt-5">
+            <h2 className="text-sm font-semibold text-[#1C1B1A]">Horario</h2>
+            <label className="mt-3 flex items-center gap-3">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-neutral-300 text-[#1C1B1A] focus:ring-[#1C1B1A]"
+                {...register('trabaja_domingos')}
+              />
+              <span className="text-sm text-neutral-700">El taller trabaja los domingos</span>
+            </label>
+            <p className="mt-1.5 text-xs text-neutral-400">
+              Si está apagado, la Agenda no permite crear ni mover citas a domingo.
+            </p>
           </div>
 
           <button
