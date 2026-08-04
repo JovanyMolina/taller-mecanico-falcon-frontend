@@ -1,12 +1,48 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { X } from 'lucide-react';
+import Swal from 'sweetalert2';
+import { X, Camera, Trash2 } from 'lucide-react';
 import SelectorCliente from './SelectorCliente';
+import motoEvidenciaService from '../services/motoEvidencia.service';
+import { API_ORIGIN } from '../services/api';
 
 export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) {
   const esEdicion = Boolean(moto);
+  const [fotos, setFotos] = useState([]);
+  const [evidencias, setEvidencias] = useState([]);
+  const [cargandoEvidencias, setCargandoEvidencias] = useState(false);
+
+  useEffect(() => {
+    if (!esEdicion) return;
+
+    setCargandoEvidencias(true);
+    motoEvidenciaService
+      .listarPorMoto(moto.id)
+      .then(setEvidencias)
+      .catch(() => setEvidencias([]))
+      .finally(() => setCargandoEvidencias(false));
+  }, [moto?.id]);
+
+  async function eliminarEvidencia(evidencia) {
+    const confirmacion = await Swal.fire({
+      icon: 'warning',
+      title: '¿Eliminar esta foto?',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#1C1B1A',
+    });
+    if (!confirmacion.isConfirmed) return;
+
+    try {
+      await motoEvidenciaService.eliminar(moto.id, evidencia.id);
+      setEvidencias((actual) => actual.filter((e) => e.id !== evidencia.id));
+    } catch (error) {
+      Swal.fire({ icon: 'error', title: 'No se pudo eliminar', text: error.message });
+    }
+  }
 
   const {
     register,
@@ -40,6 +76,10 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
     });
   }, [moto, reset]);
 
+  function alGuardar(datos) {
+    onGuardar({ ...datos, fotos });
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-xl">
@@ -52,7 +92,7 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onGuardar)} className="mt-5 space-y-4" noValidate>
+        <form onSubmit={handleSubmit(alGuardar)} className="mt-5 space-y-4" noValidate>
           <div>
             <label className="text-sm font-medium text-[#1C1B1A]">Cliente</label>
             <div className="mt-1.5">
@@ -141,6 +181,64 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
               {...register('falla_reportada')}
             />
           </div>
+
+
+          {!esEdicion && (
+            <div>
+              <label className="text-sm font-medium text-[#1C1B1A]">
+                Evidencia en fotos <span className="font-normal text-neutral-400">(opcional)</span>
+              </label>
+              <label className="mt-1.5 flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-neutral-300 px-3 py-2.5 text-sm text-neutral-500 transition hover:border-[#1C1B1A] hover:text-[#1C1B1A]">
+                <Camera size={16} />
+                {fotos.length > 0
+                  ? `${fotos.length} foto${fotos.length !== 1 ? 's' : ''} seleccionada${fotos.length !== 1 ? 's' : ''}`
+                  : 'Seleccionar fotos (cualquier formato de imagen)'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => setFotos(Array.from(e.target.files || []))}
+                />
+              </label>
+            </div>
+          )}
+
+          {esEdicion && (
+            <div>
+              <label className="text-sm font-medium text-[#1C1B1A]">Evidencia en fotos</label>
+
+              {cargandoEvidencias && (
+                <p className="mt-1.5 text-xs text-neutral-400">Cargando fotos...</p>
+              )}
+
+              {!cargandoEvidencias && evidencias.length === 0 && (
+                <p className="mt-1.5 text-xs text-neutral-400">No hay fotos registradas para esta moto.</p>
+              )}
+
+              {!cargandoEvidencias && evidencias.length > 0 && (
+                <div className="mt-2 grid grid-cols-4 gap-2">
+                  {evidencias.map((evidencia) => (
+                    <div key={evidencia.id} className="group relative aspect-square overflow-hidden rounded-md border border-neutral-200">
+                      <img
+                        src={`${API_ORIGIN}${evidencia.url_imagen}`}
+                        alt="Evidencia de la moto"
+                        className="h-full w-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => eliminarEvidencia(evidencia)}
+                        className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 transition group-hover:opacity-100"
+                        title="Eliminar foto"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <button

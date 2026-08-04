@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Swal from 'sweetalert2';
 import { Search, Plus, Pencil, Power } from 'lucide-react';
 import motocicletaService from '../../../services/motocicleta.service';
+import motoEvidenciaService from '../../../services/motoEvidencia.service';
 import { useDebounce } from '../../../hooks/useDebounce';
 import MotoFormModal from '../../../components/MotoFormModal';
 
@@ -68,13 +69,26 @@ export default function MotosPage() {
     setModalAbierto(true);
   }
 
-  async function guardarMoto(datos) {
+  async function guardarMoto(datosConFotos) {
+    const { fotos, ...datos } = datosConFotos;
+
     setGuardando(true);
     try {
       if (motoEditando) {
         await motocicletaService.actualizar(motoEditando.id, datos);
       } else {
-        await motocicletaService.crear(datos);
+        const motoCreada = await motocicletaService.crear(datos);
+        if (fotos && fotos.length > 0) {
+          try {
+            await motoEvidenciaService.subir(motoCreada.id, fotos);
+          } catch (errorFotos) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Moto registrada, pero las fotos no se pudieron subir',
+              text: errorFotos.message,
+            });
+          }
+        }
       }
       setModalAbierto(false);
       await cargarMotos();
