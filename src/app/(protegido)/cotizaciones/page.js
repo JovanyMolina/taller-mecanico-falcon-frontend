@@ -76,12 +76,14 @@ export default function CotizacionesPage() {
       precio_unitario: Number(item.precio_unitario),
     }));
 
+    const observaciones = datos.observaciones?.trim() || null;
+
     setGuardando(true);
     try {
       if (cotizacionActiva) {
-        await cotizacionService.actualizar(cotizacionActiva.id, { items });
+        await cotizacionService.actualizar(cotizacionActiva.id, { items, observaciones });
       } else {
-        await cotizacionService.crear({ moto_id: datos.moto_id, items });
+        await cotizacionService.crear({ moto_id: datos.moto_id, items, observaciones });
       }
       setModalAbierto(false);
       await cargarCotizaciones();

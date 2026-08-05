@@ -25,6 +25,7 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
   } = useForm({
     defaultValues: {
       moto_id: cotizacion?.moto_id || null,
+      observaciones: cotizacion?.observaciones || '',
       items: cotizacion?.items?.length
         ? cotizacion.items.map((i) => ({
             tipo: i.tipo,
@@ -41,6 +42,7 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
   useEffect(() => {
     reset({
       moto_id: cotizacion?.moto_id || null,
+      observaciones: cotizacion?.observaciones || '',
       items: cotizacion?.items?.length
         ? cotizacion.items.map((i) => ({
             tipo: i.tipo,
@@ -168,6 +170,28 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
                 </div>
               ))}
             </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-[#1C1B1A]">Observaciones</label>
+            {soloLectura ? (
+              <p className="mt-1.5 whitespace-pre-line text-sm text-neutral-600">
+                {cotizacion?.observaciones || 'Sin observaciones'}
+              </p>
+            ) : (
+              <>
+                <textarea
+                  rows={3}
+                  placeholder="Notas u observaciones adicionales sobre la cotización (opcional)"
+                  maxLength={1000}
+                  className="mt-1.5 w-full resize-none rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
+                  {...register('observaciones')}
+                />
+                {errors.observaciones && (
+                  <p className="mt-1 text-xs text-red-600">{errors.observaciones.message}</p>
+                )}
+              </>
+            )}
           </div>
 
           <div className="flex items-center justify-end gap-2 border-t border-neutral-200 pt-4">

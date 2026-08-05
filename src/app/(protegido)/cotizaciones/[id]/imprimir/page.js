@@ -145,6 +145,13 @@ export default function ImprimirCotizacionPage() {
           </tbody>
         </table>
 
+        {cotizacion.observaciones && (
+          <div className="mt-6 border-t border-neutral-200 pt-4">
+            <p className="text-xs uppercase tracking-wide text-neutral-400">Observaciones</p>
+            <p className="mt-1 whitespace-pre-line text-sm text-neutral-700">{cotizacion.observaciones}</p>
+          </div>
+        )}
+
         <div className="mt-6 flex justify-end border-t border-neutral-200 pt-4">
           <div className="text-right">
             <p className="text-xs uppercase tracking-wide text-neutral-400">Total</p>
