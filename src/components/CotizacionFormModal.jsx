@@ -5,11 +5,29 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { X, Plus, Trash2 } from 'lucide-react';
 import SelectorMoto from './SelectorMoto';
 
-const ITEM_VACIO = { tipo: 'refaccion', concepto: '', cantidad: 1, precio_unitario: '' };
+const ITEM_VACIO = { tipo: 'refaccion', concepto: '', cantidad: 1, precio_unitario: '', caducacion: '' };
+
+const TIPO_LABEL = {
+  refaccion: 'Refacción',
+  mano_obra: 'Mano de obra',
+  refaccion_caducidad: 'Refacción con caducidad',
+};
 
 function nombreMoto(cotizacion) {
   if (!cotizacion) return '';
   return `${cotizacion.moto_marca} ${cotizacion.moto_modelo} · ${cotizacion.moto_placa || 'sin placa'} (${cotizacion.cliente_nombre})`;
+}
+
+function mapearItems(cotizacion) {
+  return cotizacion?.items?.length
+    ? cotizacion.items.map((i) => ({
+        tipo: i.tipo,
+        concepto: i.concepto,
+        cantidad: i.cantidad,
+        precio_unitario: i.precio_unitario,
+        caducacion: i.caducacion ? String(i.caducacion).slice(0, 10) : '',
+      }))
+    : [ITEM_VACIO];
 }
 
 export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar, onCerrar, guardando }) {
@@ -26,14 +44,8 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
     defaultValues: {
       moto_id: cotizacion?.moto_id || null,
       observaciones: cotizacion?.observaciones || '',
-      items: cotizacion?.items?.length
-        ? cotizacion.items.map((i) => ({
-            tipo: i.tipo,
-            concepto: i.concepto,
-            cantidad: i.cantidad,
-            precio_unitario: i.precio_unitario,
-          }))
-        : [ITEM_VACIO],
+      anticipo: cotizacion?.anticipo ?? '',
+      items: mapearItems(cotizacion),
     },
   });
 
@@ -43,24 +55,20 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
     reset({
       moto_id: cotizacion?.moto_id || null,
       observaciones: cotizacion?.observaciones || '',
-      items: cotizacion?.items?.length
-        ? cotizacion.items.map((i) => ({
-            tipo: i.tipo,
-            concepto: i.concepto,
-            cantidad: i.cantidad,
-            precio_unitario: i.precio_unitario,
-          }))
-        : [ITEM_VACIO],
+      anticipo: cotizacion?.anticipo ?? '',
+      items: mapearItems(cotizacion),
     });
   }, [cotizacion, reset]);
 
-  
   const itemsEnVivo = watch('items');
+  const anticipoEnVivo = watch('anticipo');
   const total = (itemsEnVivo || []).reduce((acc, item) => {
     const cantidad = Number(item.cantidad) || 0;
     const precio = Number(item.precio_unitario) || 0;
     return acc + cantidad * precio;
   }, 0);
+  const anticipoNum = Number(anticipoEnVivo) || 0;
+  const saldoRestante = total - anticipoNum;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -118,58 +126,128 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
             </div>
 
             <div className="mt-2 space-y-2">
-              {fields.map((field, index) => (
-                <div key={field.id} className="grid grid-cols-12 items-start gap-2">
-                  <select
-                    disabled={soloLectura}
-                    className="col-span-3 rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
-                    {...register(`items.${index}.tipo`)}
+              {fields.map((field, index) => {
+                const tipoActual = itemsEnVivo?.[index]?.tipo;
+                const tieneCaducidad = tipoActual === 'refaccion_caducidad';
+
+                return (
+                  <div
+                    key={field.id}
+                    className={`rounded-md ${tieneCaducidad ? 'border border-amber-200 bg-amber-50/50 p-2' : ''}`}
                   >
-                    <option value="refaccion">Refacción</option>
-                    <option value="mano_obra">Mano de obra</option>
-                  </select>
+                    <div className="grid grid-cols-12 items-start gap-2">
+                      {soloLectura ? (
+                        <div className="col-span-3 flex items-center px-2 py-2 text-xs text-neutral-600">
+                          {TIPO_LABEL[field.tipo] || field.tipo}
+                        </div>
+                      ) : (
+                        <select
+                          disabled={soloLectura}
+                          className="col-span-3 rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
+                          {...register(`items.${index}.tipo`)}
+                        >
+                          <option value="refaccion">Refacción</option>
+                          <option value="mano_obra">Mano de obra</option>
+                          <option value="refaccion_caducidad">Refacción con caducidad</option>
+                        </select>
+                      )}
 
-                  <div className="col-span-4">
-                    <input
-                      disabled={soloLectura}
-                      placeholder="Concepto"
-                      className="w-full rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
-                      {...register(`items.${index}.concepto`, { required: 'Requerido' })}
-                    />
+                      <div className="col-span-4">
+                        <input
+                          disabled={soloLectura}
+                          placeholder="Concepto"
+                          className="w-full rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
+                          {...register(`items.${index}.concepto`, { required: 'Requerido' })}
+                        />
+                      </div>
+
+                      <input
+                        type="number"
+                        disabled={soloLectura}
+                        placeholder="Cant."
+                        min={1}
+                        className="col-span-1 rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
+                        {...register(`items.${index}.cantidad`, { required: true, min: 1 })}
+                      />
+
+                      <input
+                        type="number"
+                        step="0.01"
+                        disabled={soloLectura}
+                        placeholder="Precio unit."
+                        min={0}
+                        className="col-span-3 rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
+                        {...register(`items.${index}.precio_unitario`, { required: true, min: 0 })}
+                      />
+
+                      {!soloLectura && (
+                        <button
+                          type="button"
+                          onClick={() => fields.length > 1 && remove(index)}
+                          disabled={fields.length === 1}
+                          className="col-span-1 flex items-center justify-center rounded-md p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600 disabled:opacity-30"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
+                    </div>
+
+                    {tieneCaducidad && (
+                      <div className="mt-2 flex items-center gap-2 pl-2">
+                        <label className="text-xs font-medium text-amber-800">Fecha de caducidad:</label>
+                        {soloLectura ? (
+                          <span className="text-xs text-neutral-600">
+                            {itemsEnVivo?.[index]?.caducacion
+                              ? new Date(`${itemsEnVivo[index].caducacion}T00:00:00`).toLocaleDateString('es-MX', {
+                                  day: 'numeric',
+                                  month: 'long',
+                                  year: 'numeric',
+                                })
+                              : 'Sin fecha'}
+                          </span>
+                        ) : (
+                          <input
+                            type="date"
+                            className="rounded-md border border-amber-300 px-2 py-1.5 text-xs outline-none focus:border-[#1C1B1A]"
+                            {...register(`items.${index}.caducacion`)}
+                          />
+                        )}
+                      </div>
+                    )}
                   </div>
+                );
+              })}
+            </div>
+          </div>
 
-                  <input
-                    type="number"
-                    disabled={soloLectura}
-                    placeholder="Cant."
-                    min={1}
-                    className="col-span-1 rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
-                    {...register(`items.${index}.cantidad`, { required: true, min: 1 })}
-                  />
-
+          <div>
+            <label className="text-sm font-medium text-[#1C1B1A]">Anticipo</label>
+            {soloLectura ? (
+              <p className="mt-1.5 text-sm text-neutral-600">
+                {cotizacion?.anticipo
+                  ? `$${Number(cotizacion.anticipo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`
+                  : 'Sin anticipo'}
+              </p>
+            ) : (
+              <>
+                <div className="relative mt-1.5 max-w-[200px]">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">
+                    $
+                  </span>
                   <input
                     type="number"
                     step="0.01"
-                    disabled={soloLectura}
-                    placeholder="Precio unit."
                     min={0}
-                    className="col-span-3 rounded-md border border-neutral-300 px-2 py-2 text-xs outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
-                    {...register(`items.${index}.precio_unitario`, { required: true, min: 0 })}
+                    placeholder="0.00"
+                    className="w-full rounded-md border border-neutral-300 py-2 pl-6 pr-3 text-sm outline-none focus:border-[#1C1B1A] disabled:bg-neutral-50"
+                    {...register('anticipo', { min: { value: 0, message: 'Debe ser un monto positivo' } })}
                   />
-
-                  {!soloLectura && (
-                    <button
-                      type="button"
-                      onClick={() => fields.length > 1 && remove(index)}
-                      disabled={fields.length === 1}
-                      className="col-span-1 flex items-center justify-center rounded-md p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600 disabled:opacity-30"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  )}
                 </div>
-              ))}
-            </div>
+                {errors.anticipo && (
+                  <p className="mt-1 text-xs text-red-600">{errors.anticipo.message}</p>
+                )}
+              </>
+            )}
           </div>
 
           <div>
@@ -194,11 +272,29 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-2 border-t border-neutral-200 pt-4">
-            <span className="text-sm text-neutral-500">Total:</span>
-            <span className="text-lg font-bold text-[#1C1B1A]">
-              ${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-            </span>
+          <div className="flex flex-col items-end gap-1 border-t border-neutral-200 pt-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-neutral-500">Total:</span>
+              <span className="text-lg font-bold text-[#1C1B1A]">
+                ${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            {anticipoNum > 0 && (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-neutral-500">Anticipo:</span>
+                  <span className="text-sm font-medium text-neutral-700">
+                    ${anticipoNum.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-neutral-500">Saldo restante:</span>
+                  <span className="text-sm font-bold text-[#B4650F]">
+                    ${saldoRestante.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="flex gap-3 pt-1">

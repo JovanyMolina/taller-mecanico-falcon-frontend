@@ -74,16 +74,18 @@ export default function CotizacionesPage() {
       concepto: item.concepto,
       cantidad: Number(item.cantidad),
       precio_unitario: Number(item.precio_unitario),
+      caducacion: item.tipo === 'refaccion_caducidad' ? item.caducacion || null : null,
     }));
 
     const observaciones = datos.observaciones?.trim() || null;
+    const anticipo = datos.anticipo !== '' && datos.anticipo != null ? Number(datos.anticipo) : null;
 
     setGuardando(true);
     try {
       if (cotizacionActiva) {
-        await cotizacionService.actualizar(cotizacionActiva.id, { items, observaciones });
+        await cotizacionService.actualizar(cotizacionActiva.id, { items, observaciones, anticipo });
       } else {
-        await cotizacionService.crear({ moto_id: datos.moto_id, items, observaciones });
+        await cotizacionService.crear({ moto_id: datos.moto_id, items, observaciones, anticipo });
       }
       setModalAbierto(false);
       await cargarCotizaciones();

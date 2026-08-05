@@ -20,7 +20,11 @@ const ESTADO_COLOR = {
   rechazada: 'border-red-600 text-red-700 bg-red-50',
 };
 
-const TIPO_LABEL = { refaccion: 'Refacción', mano_obra: 'Mano de obra' };
+const TIPO_LABEL = {
+  refaccion: 'Refacción',
+  mano_obra: 'Mano de obra',
+  refaccion_caducidad: 'Refacción con caducidad',
+};
 
 export default function ImprimirCotizacionPage() {
   const { id } = useParams();
@@ -125,6 +129,7 @@ export default function ImprimirCotizacionPage() {
               <th className="py-2">Concepto</th>
               <th className="py-2 text-right">Cant.</th>
               <th className="py-2 text-right">Precio unit.</th>
+              <th className="py-2 text-right">Caducidad</th>
               <th className="py-2 text-right">Subtotal</th>
             </tr>
           </thead>
@@ -136,6 +141,15 @@ export default function ImprimirCotizacionPage() {
                 <td className="py-2 text-right text-neutral-600">{item.cantidad}</td>
                 <td className="py-2 text-right text-neutral-600">
                   ${Number(item.precio_unitario).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                </td>
+                <td className="py-2 text-right text-neutral-600">
+                  {item.caducacion
+                    ? new Date(`${item.caducacion}T00:00:00`).toLocaleDateString('es-MX', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })
+                    : '—'}
                 </td>
                 <td className="py-2 text-right font-medium text-[#1C1B1A]">
                   ${Number(item.subtotal).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
@@ -158,6 +172,22 @@ export default function ImprimirCotizacionPage() {
             <p className="text-2xl font-bold text-[#1C1B1A]">
               ${Number(cotizacion.total).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
             </p>
+            {Number(cotizacion.anticipo) > 0 && (
+              <div className="mt-2 space-y-0.5 border-t border-neutral-200 pt-2">
+                <p className="text-xs text-neutral-500">
+                  Anticipo:{' '}
+                  <span className="font-medium text-neutral-700">
+                    ${Number(cotizacion.anticipo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                  </span>
+                </p>
+                <p className="text-sm font-bold text-[#B4650F]">
+                  Saldo restante: $
+                  {(Number(cotizacion.total) - Number(cotizacion.anticipo)).toLocaleString('es-MX', {
+                    minimumFractionDigits: 2,
+                  })}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
