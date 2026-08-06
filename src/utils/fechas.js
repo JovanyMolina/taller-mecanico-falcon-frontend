@@ -33,3 +33,20 @@ export function esDomingo(fecha) {
   }
   return fecha.getDay() === 0;
 }
+
+export function formatearFechaHora(valor) {
+  if (!valor) return '';
+  const fecha = new Date(String(valor).replace(' ', 'T'));
+  if (Number.isNaN(fecha.getTime())) return String(valor);
+
+  const fechaTexto = fecha.toLocaleDateString('es-MX', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+  const horaTexto = fecha.toLocaleTimeString('es-MX', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  return { fecha: fechaTexto, hora: horaTexto };
+}

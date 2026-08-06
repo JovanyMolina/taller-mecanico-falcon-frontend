@@ -5,7 +5,7 @@ import Header from '../../components/Header';
 export default function ProtegidoLayout({ children }) {
   return (
     <RutaProtegida>
-      <div className="flex min-h-screen bg-neutral-50">
+      <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
         <Sidebar />
         <div className="flex flex-1 flex-col">
           <Header />

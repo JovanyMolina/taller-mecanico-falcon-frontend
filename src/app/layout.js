@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
+import { ThemeProvider, SCRIPT_INICIAL_TEMA } from "../context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,9 +23,15 @@ export default function RootLayout({ children }) {
     <html
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_INICIAL_TEMA }} />
+      </head>
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

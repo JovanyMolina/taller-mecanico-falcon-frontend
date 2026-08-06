@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import ThemeToggle from '../../components/ThemeToggle';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -89,29 +90,33 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="flex w-full flex-col justify-center px-6 sm:px-16 lg:w-1/2">
+      <div className="relative flex w-full flex-col justify-center px-6 sm:px-16 lg:w-1/2">
+        <div className="absolute right-6 top-6">
+          <ThemeToggle />
+        </div>
+
         <div className="mx-auto w-full max-w-sm">
           <div className="mb-10 lg:hidden">
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#B4650F]">
+            <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#B4650F] dark:text-[#F5A623]">
               Taller Motos
             </span>
           </div>
 
-          <h2 className="text-2xl font-bold text-[#1C1B1A]">Inicia sesión</h2>
-          <p className="mt-1.5 text-sm text-neutral-500">
+          <h2 className="text-2xl font-bold text-[#1C1B1A] dark:text-neutral-100">Inicia sesión</h2>
+          <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
             Usa tu correo y contraseña asignados por el administrador.
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5" noValidate>
             <div>
-              <label htmlFor="email" className="text-sm font-medium text-[#1C1B1A]">
+              <label htmlFor="email" className="text-sm font-medium text-[#1C1B1A] dark:text-neutral-100">
                 Correo
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="mt-1.5 w-full rounded-md border border-neutral-300 px-3 py-2.5 text-sm outline-none transition focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+                className="mt-1.5 w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2.5 text-sm outline-none transition focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
                 placeholder="tu@tallermotos.com"
                 {...register('email', {
                   required: 'El correo es obligatorio',
@@ -119,12 +124,12 @@ export default function LoginPage() {
                 })}
               />
               {errors.email && (
-                <p className="mt-1.5 text-xs text-red-600">{errors.email.message}</p>
+                <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">{errors.email.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="password" className="text-sm font-medium text-[#1C1B1A]">
+              <label htmlFor="password" className="text-sm font-medium text-[#1C1B1A] dark:text-neutral-100">
                 Contraseña
               </label>
               <div className="relative mt-1.5">
@@ -132,14 +137,14 @@ export default function LoginPage() {
                   id="password"
                   type={mostrarPassword ? 'text' : 'password'}
                   autoComplete="current-password"
-                  className="w-full rounded-md border border-neutral-300 px-3 py-2.5 pr-10 text-sm outline-none transition focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+                  className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2.5 pr-10 text-sm outline-none transition focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
                   placeholder="••••••••"
                   {...register('password', { required: 'La contraseña es obligatoria' })}
                 />
                 <button
                   type="button"
                   onClick={() => setMostrarPassword((actual) => !actual)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-200"
                   tabIndex={-1}
                   aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                 >
@@ -147,14 +152,14 @@ export default function LoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1.5 text-xs text-red-600">{errors.password.message}</p>
+                <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">{errors.password.message}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={enviando}
-              className="w-full rounded-md bg-[#1C1B1A] py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90 disabled:opacity-50"
+              className="w-full rounded-md bg-[#1C1B1A] py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90 disabled:opacity-50 dark:bg-neutral-100 dark:text-[#1C1B1A] dark:hover:bg-neutral-200"
             >
               {enviando ? 'Entrando...' : 'Entrar'}
             </button>

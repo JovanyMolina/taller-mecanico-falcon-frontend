@@ -106,8 +106,6 @@ export default function UsuariosPage() {
       await usuarioService.eliminar(usuario.id);
       await cargarUsuarios();
     } catch (error) {
-      // Si tiene historial (cotizaciones, órdenes), el backend lo rechaza y
-      // sugiere desactivar en su lugar — se lo ofrecemos directo aquí.
       const ofrecerDesactivar = await Swal.fire({
         icon: 'error',
         title: 'No se pudo eliminar',
@@ -127,15 +125,15 @@ export default function UsuariosPage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1C1B1A]">Usuarios</h1>
-          <p className="mt-1 text-sm text-neutral-500">
+          <h1 className="text-2xl font-bold text-[#1C1B1A] dark:text-neutral-100">Usuarios</h1>
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {usuarios.length} usuario{usuarios.length !== 1 && 's'} registrado
             {usuarios.length !== 1 && 's'}
           </p>
         </div>
         <button
           onClick={abrirModalNuevo}
-          className="flex items-center gap-2 rounded-md bg-[#1C1B1A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90"
+          className="flex items-center gap-2 rounded-md bg-[#1C1B1A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90 dark:bg-neutral-100 dark:text-[#1C1B1A] dark:hover:bg-neutral-200"
         >
           <Plus size={16} />
           Nuevo usuario
@@ -143,20 +141,20 @@ export default function UsuariosPage() {
       </div>
 
       <div className="relative mt-6 max-w-sm">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" />
         <input
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           placeholder="Buscar por nombre o email..."
-          className="w-full rounded-md border border-neutral-300 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+          className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
         />
       </div>
 
-      <div className="mt-6 rounded-lg border border-neutral-200 bg-white">
+      <div className="mt-6 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
         <div className="max-h-[600px] overflow-y-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wide text-neutral-500">
+            <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-left text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
               <th className="px-4 py-3 font-medium">Nombre</th>
               <th className="px-4 py-3 font-medium">Email</th>
               <th className="px-4 py-3 font-medium">Rol</th>
@@ -167,7 +165,7 @@ export default function UsuariosPage() {
           <tbody>
             {cargando && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-neutral-400">
+                <td colSpan={5} className="px-4 py-8 text-center text-neutral-400 dark:text-neutral-500">
                   Cargando...
                 </td>
               </tr>
@@ -175,7 +173,7 @@ export default function UsuariosPage() {
 
             {!cargando && usuarios.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-neutral-400">
+                <td colSpan={5} className="px-4 py-8 text-center text-neutral-400 dark:text-neutral-500">
                   No se encontraron usuarios.
                 </td>
               </tr>
@@ -186,18 +184,18 @@ export default function UsuariosPage() {
                 const esUnoMismo = usuario.id === usuarioActual?.id;
 
                 return (
-                  <tr key={usuario.id} className="border-b border-neutral-100 last:border-0">
-                    <td className="px-4 py-3 font-medium text-[#1C1B1A]">
+                  <tr key={usuario.id} className="border-b border-neutral-100 dark:border-neutral-800 last:border-0">
+                    <td className="px-4 py-3 font-medium text-[#1C1B1A] dark:text-neutral-100">
                       {usuario.nombre}
-                      {esUnoMismo && <span className="ml-2 text-xs text-neutral-400">(tú)</span>}
+                      {esUnoMismo && <span className="ml-2 text-xs text-neutral-400 dark:text-neutral-500">(tú)</span>}
                     </td>
-                    <td className="px-4 py-3 text-neutral-600">{usuario.email}</td>
+                    <td className="px-4 py-3 text-neutral-600 dark:text-neutral-300">{usuario.email}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                           usuario.rol === 'admin'
-                            ? 'bg-[#1C1B1A]/10 text-[#1C1B1A]'
-                            : 'bg-neutral-100 text-neutral-600'
+                            ? 'bg-[#1C1B1A]/10 text-[#1C1B1A] dark:bg-white/10 dark:text-white'
+                            : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300'
                         }`}
                       >
                         {ROL_LABEL[usuario.rol]}
@@ -207,8 +205,8 @@ export default function UsuariosPage() {
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                           usuario.activo
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-neutral-100 text-neutral-500'
+                            ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                            : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400'
                         }`}
                       >
                         {usuario.activo ? 'Activo' : 'Inactivo'}
@@ -218,27 +216,24 @@ export default function UsuariosPage() {
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => abrirModalEditar(usuario)}
-                          className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-100 hover:text-[#1C1B1A]"
+                          className="rounded-md p-1.5 text-neutral-500 dark:text-neutral-400 transition hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-[#1C1B1A] dark:hover:text-white"
                           title="Editar"
                         >
                           <Pencil size={16} />
                         </button>
 
-                        {/* No se puede desactivar ni eliminar la propia cuenta — el backend
-                            ya lo bloquea, pero también lo ocultamos aquí para no ofrecer
-                            una acción que sabemos que va a fallar. */}
                         {!esUnoMismo && (
                           <>
                             <button
                               onClick={() => alternarEstado(usuario)}
-                              className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-100 hover:text-[#1C1B1A]"
+                              className="rounded-md p-1.5 text-neutral-500 dark:text-neutral-400 transition hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-[#1C1B1A] dark:hover:text-white"
                               title={usuario.activo ? 'Desactivar' : 'Activar'}
                             >
                               <Power size={16} />
                             </button>
                             <button
                               onClick={() => eliminarUsuario(usuario)}
-                              className="rounded-md p-1.5 text-neutral-500 transition hover:bg-red-50 hover:text-red-600"
+                              className="rounded-md p-1.5 text-neutral-500 dark:text-neutral-400 transition hover:bg-red-50 hover:text-red-600 dark:hover:text-red-400"
                               title="Eliminar"
                             >
                               <Trash2 size={16} />

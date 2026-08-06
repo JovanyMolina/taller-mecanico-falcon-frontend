@@ -25,11 +25,11 @@ const ESTADO_LABEL = {
 };
 
 const ESTADO_COLOR = {
-  recibida: 'bg-blue-100 text-blue-700',
-  en_diagnostico: 'bg-amber-100 text-amber-700',
-  en_reparacion: 'bg-orange-100 text-orange-700',
-  lista: 'bg-green-100 text-green-700',
-  entregada: 'bg-neutral-200 text-neutral-600',
+  recibida: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
+  en_diagnostico: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',
+  en_reparacion: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300',
+  lista: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+  entregada: 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300',
 };
 
 export default function MotosPage() {
@@ -149,14 +149,14 @@ export default function MotosPage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1C1B1A]">Motos</h1>
-          <p className="mt-1 text-sm text-neutral-500">
+          <h1 className="text-2xl font-bold text-[#1C1B1A] dark:text-neutral-100">Motos</h1>
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {motos.length} moto{motos.length !== 1 && 's'} registrada{motos.length !== 1 && 's'}
           </p>
         </div>
         <button
           onClick={abrirModalNuevo}
-          className="flex items-center gap-2 rounded-md bg-[#1C1B1A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90"
+          className="flex items-center gap-2 rounded-md bg-[#1C1B1A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90 dark:bg-neutral-100 dark:text-[#1C1B1A] dark:hover:bg-neutral-200"
         >
           <Plus size={16} />
           Registrar moto
@@ -165,19 +165,19 @@ export default function MotosPage() {
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="relative max-w-sm flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" />
           <input
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por placa, cliente o teléfono..."
-            className="w-full rounded-md border border-neutral-300 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+            className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
           />
         </div>
 
         <select
           value={filtroEstado}
           onChange={(e) => setFiltroEstado(e.target.value)}
-          className="rounded-md border border-neutral-300 px-3 py-2.5 text-sm outline-none focus:border-[#1C1B1A] focus:ring-1 focus:ring-[#1C1B1A]"
+          className="rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-700 outline-none transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
         >
           <option value="">Todos los estados</option>
           {Object.entries(ESTADO_LABEL).map(([valor, etiqueta]) => (
@@ -188,10 +188,10 @@ export default function MotosPage() {
         </select>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white">
+      <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wide text-neutral-500">
+            <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-left text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
               <th className="px-4 py-3 font-medium">Cliente</th>
               <th className="px-4 py-3 font-medium">Moto</th>
               <th className="px-4 py-3 font-medium">Placa</th>
@@ -203,7 +203,7 @@ export default function MotosPage() {
           <tbody>
             {cargando && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-neutral-400">
+                <td colSpan={6} className="px-4 py-8 text-center text-neutral-400 dark:text-neutral-500">
                   Cargando...
                 </td>
               </tr>
@@ -211,7 +211,7 @@ export default function MotosPage() {
 
             {!cargando && motos.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-neutral-400">
+                <td colSpan={6} className="px-4 py-8 text-center text-neutral-400 dark:text-neutral-500">
                   No se encontraron motos.
                 </td>
               </tr>
@@ -219,15 +219,15 @@ export default function MotosPage() {
 
             {!cargando &&
               motos.map((moto) => (
-                <tr key={moto.id} className="border-b border-neutral-100 last:border-0">
+                <tr key={moto.id} className="border-b border-neutral-100 dark:border-neutral-800 last:border-0">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[#1C1B1A]">{moto.cliente_nombre}</p>
-                    <p className="text-xs text-neutral-400">{moto.cliente_telefono}</p>
+                    <p className="font-medium text-[#1C1B1A] dark:text-neutral-100">{moto.cliente_nombre}</p>
+                    <p className="text-xs text-neutral-400 dark:text-neutral-500">{moto.cliente_telefono}</p>
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">
+                  <td className="px-4 py-3 text-neutral-600 dark:text-neutral-300">
                     {moto.marca} {moto.modelo} {moto.anio && `(${moto.anio})`}
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">{moto.placa || '—'}</td>
+                  <td className="px-4 py-3 text-neutral-600 dark:text-neutral-300">{moto.placa || '—'}</td>
                   <td className="px-4 py-3">
                     <select
                       value={moto.estado}
@@ -247,7 +247,7 @@ export default function MotosPage() {
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                        moto.activo ? 'bg-green-100 text-green-700' : 'bg-neutral-100 text-neutral-500'
+                        moto.activo ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400'
                       }`}
                     >
                       {moto.activo ? 'Sí' : 'No'}
@@ -257,14 +257,14 @@ export default function MotosPage() {
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => abrirModalEditar(moto)}
-                        className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-100 hover:text-[#1C1B1A]"
+                        className="rounded-md p-1.5 text-neutral-500 dark:text-neutral-400 transition hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-[#1C1B1A] dark:hover:text-white"
                         title="Editar"
                       >
                         <Pencil size={16} />
                       </button>
                       <button
                         onClick={() => alternarActivo(moto)}
-                        className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-100 hover:text-[#1C1B1A]"
+                        className="rounded-md p-1.5 text-neutral-500 dark:text-neutral-400 transition hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-[#1C1B1A] dark:hover:text-white"
                         title={moto.activo ? 'Desactivar' : 'Activar'}
                       >
                         <Power size={16} />

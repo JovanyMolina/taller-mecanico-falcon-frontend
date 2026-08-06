@@ -29,10 +29,10 @@ const ESTADO_LABEL = {
 };
 
 const ESTADO_COLOR = {
-  programada: 'bg-blue-100 text-blue-700',
-  confirmada: 'bg-amber-100 text-amber-700',
-  completada: 'bg-green-100 text-green-700',
-  cancelada: 'bg-red-100 text-red-700',
+  programada: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
+  confirmada: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',
+  completada: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+  cancelada: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
 };
 
 export default function AgendaPage() {
@@ -151,26 +151,26 @@ export default function AgendaPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#1C1B1A]">Agenda semanal</h1>
-          <p className="mt-1 text-sm capitalize text-neutral-500">{rangoLegible}</p>
+          <h1 className="text-2xl font-bold text-[#1C1B1A] dark:text-neutral-100">Agenda semanal</h1>
+          <p className="mt-1 text-sm capitalize text-neutral-500 dark:text-neutral-400">{rangoLegible}</p>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={irSemanaAnterior}
-            className="rounded-md border border-neutral-300 p-2 text-neutral-600 transition hover:bg-neutral-100"
+            className="rounded-md border border-neutral-300 dark:border-neutral-700 p-2 text-neutral-600 dark:text-neutral-300 transition hover:bg-neutral-100 dark:hover:bg-neutral-700"
           >
             <ChevronLeft size={16} />
           </button>
           <button
             onClick={irHoy}
-            className="rounded-md border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-600 transition hover:bg-neutral-100"
+            className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-300 transition hover:bg-neutral-100 dark:hover:bg-neutral-700"
           >
             Hoy
           </button>
           <button
             onClick={irSemanaSiguiente}
-            className="rounded-md border border-neutral-300 p-2 text-neutral-600 transition hover:bg-neutral-100"
+            className="rounded-md border border-neutral-300 dark:border-neutral-700 p-2 text-neutral-600 dark:text-neutral-300 transition hover:bg-neutral-100 dark:hover:bg-neutral-700"
           >
             <ChevronRight size={16} />
           </button>
@@ -178,7 +178,7 @@ export default function AgendaPage() {
       </div>
 
       {cargando ? (
-        <p className="mt-8 text-center text-sm text-neutral-400">Cargando agenda...</p>
+        <p className="mt-8 text-center text-sm text-neutral-400 dark:text-neutral-500">Cargando agenda...</p>
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-7">
           {dias.map((dia, index) => {
@@ -188,27 +188,27 @@ export default function AgendaPage() {
             const citasActivas = citasDia.filter((c) => c.estado !== 'cancelada');
 
             return (
-              <div key={dia.toISOString()} className="rounded-lg border border-neutral-200 bg-white">
+              <div key={dia.toISOString()} className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
                 <div
-                  className={`flex items-center justify-between border-b border-neutral-200 px-3 py-2 ${
-                    esHoy ? 'bg-[#1C1B1A]' : 'bg-neutral-50'
+                  className={`flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 px-3 py-2 ${
+                    esHoy ? 'bg-[#1C1B1A]' : 'bg-neutral-50 dark:bg-neutral-950'
                   }`}
                 >
                   <div>
                     <p
                       className={`text-xs font-medium uppercase tracking-wide ${
-                        esHoy ? 'text-[#F5A623]' : 'text-neutral-500'
+                        esHoy ? 'text-[#F5A623]' : 'text-neutral-500 dark:text-neutral-400'
                       }`}
                     >
                       {DIAS_SEMANA[index]}
                     </p>
-                    <p className={`text-sm font-bold ${esHoy ? 'text-white' : 'text-[#1C1B1A]'}`}>
+                    <p className={`text-sm font-bold ${esHoy ? 'text-white' : 'text-[#1C1B1A] dark:text-neutral-100'}`}>
                       {dia.getDate()}
                     </p>
                   </div>
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      esHoy ? 'bg-white/10 text-white' : 'bg-neutral-200 text-neutral-600'
+                      esHoy ? 'bg-white/10 text-white' : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300'
                     }`}
                   >
                     {citasActivas.length}
@@ -217,15 +217,15 @@ export default function AgendaPage() {
 
                 <div className="space-y-2 p-2">
                   {citasDia.map((cita) => (
-                    <div key={cita.id} className="rounded-md border border-neutral-200 p-2 text-xs">
+                    <div key={cita.id} className="rounded-md border border-neutral-200 dark:border-neutral-800 p-2 text-xs">
                       <button
                         onClick={() => abrirModalEditar(cita)}
-                        className="block w-full text-left font-medium text-[#1C1B1A] hover:underline"
+                        className="block w-full text-left font-medium text-[#1C1B1A] dark:text-neutral-100 hover:underline"
                       >
                         {cita.hora ? `${cita.hora.slice(0, 5)} · ` : ''}
                         {cita.cliente_nombre}
                       </button>
-                      {cita.motivo && <p className="mt-0.5 text-neutral-500">{cita.motivo}</p>}
+                      {cita.motivo && <p className="mt-0.5 text-neutral-500 dark:text-neutral-400">{cita.motivo}</p>}
                       <select
                         value={cita.estado}
                         onChange={(e) => cambiarEstado(cita, e.target.value)}
@@ -244,11 +244,11 @@ export default function AgendaPage() {
                   ))}
 
                   {index === 6 && !trabajaDomingos ? (
-                    <p className="py-2 text-center text-xs text-neutral-400">Cerrado los domingos</p>
+                    <p className="py-2 text-center text-xs text-neutral-400 dark:text-neutral-500">Cerrado los domingos</p>
                   ) : (
                     <button
                       onClick={() => abrirModalNueva(dia)}
-                      className="flex w-full items-center justify-center gap-1 rounded-md border border-dashed border-neutral-300 py-2 text-xs text-neutral-400 transition hover:border-[#1C1B1A] hover:text-[#1C1B1A]"
+                      className="flex w-full items-center justify-center gap-1 rounded-md border border-dashed border-neutral-300 dark:border-neutral-700 py-2 text-xs text-neutral-400 dark:text-neutral-500 transition hover:border-[#1C1B1A] dark:hover:border-neutral-500 hover:text-[#1C1B1A] dark:hover:text-white"
                     >
                       <Plus size={12} />
                       Agendar

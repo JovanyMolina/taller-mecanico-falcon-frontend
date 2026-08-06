@@ -46,11 +46,11 @@ export default function ImprimirCotizacionPage() {
   }, [id]);
 
   if (cargando) {
-    return <p className="p-8 text-center text-sm text-neutral-400">Cargando...</p>;
+    return <p className="p-8 text-center text-sm text-neutral-400 dark:text-neutral-500">Cargando...</p>;
   }
 
   if (!cotizacion || !negocio) {
-    return <p className="p-8 text-center text-sm text-neutral-400">Cotización no encontrada.</p>;
+    return <p className="p-8 text-center text-sm text-neutral-400 dark:text-neutral-500">Cotización no encontrada.</p>;
   }
 
   const fecha = new Date(cotizacion.created_at).toLocaleDateString('es-MX', {
@@ -64,14 +64,14 @@ export default function ImprimirCotizacionPage() {
       <div className="no-imprimir mb-6 flex items-center justify-between">
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-[#1C1B1A]"
+          className="flex items-center gap-1.5 text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-[#1C1B1A] dark:hover:text-white"
         >
           <ArrowLeft size={16} />
           Volver
         </button>
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-2 rounded-md bg-[#1C1B1A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90"
+          className="flex items-center gap-2 rounded-md bg-[#1C1B1A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1C1B1A]/90 dark:bg-neutral-100 dark:text-[#1C1B1A] dark:hover:bg-neutral-200"
         >
           <Printer size={16} />
           Imprimir
@@ -86,11 +86,14 @@ export default function ImprimirCotizacionPage() {
               alt={negocio.nombre}
               className="h-16 w-16 object-contain"
             />
+
             <div>
               <p className="text-lg font-bold text-[#1C1B1A]">{negocio.nombre}</p>
-              <p className="text-xs text-neutral-500">{negocio.direccion}</p>
               <p className="text-xs text-neutral-500">
-                {negocio.telefono} · {negocio.email}
+                {negocio.direccion ? `Ubicación: ${negocio.direccion}` : ''}
+              </p>
+              <p className="text-xs text-neutral-500">
+                {negocio.telefono ? `Tel: ${negocio.telefono}` : ''} · {negocio.email ? `Email: ${negocio.email}` : ''}
               </p>
             </div>
           </div>
