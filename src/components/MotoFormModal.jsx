@@ -13,6 +13,7 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
   const [fotos, setFotos] = useState([]);
   const [evidencias, setEvidencias] = useState([]);
   const [cargandoEvidencias, setCargandoEvidencias] = useState(false);
+  const [subiendoFotos, setSubiendoFotos] = useState(false);
 
   useEffect(() => {
     if (!esEdicion) return;
@@ -24,6 +25,22 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
       .catch(() => setEvidencias([]))
       .finally(() => setCargandoEvidencias(false));
   }, [moto?.id]);
+
+  async function agregarFotos(e) {
+    const archivos = Array.from(e.target.files || []);
+    e.target.value = '';
+    if (archivos.length === 0) return;
+
+    setSubiendoFotos(true);
+    try {
+      const nuevas = await motoEvidenciaService.subir(moto.id, archivos);
+      setEvidencias((actual) => [...actual, ...nuevas]);
+    } catch (error) {
+      Swal.fire({ icon: 'error', title: 'No se pudieron subir las fotos', text: error.message });
+    } finally {
+      setSubiendoFotos(false);
+    }
+  }
 
   async function eliminarEvidencia(evidencia) {
     const confirmacion = await Swal.fire({
@@ -206,17 +223,31 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
 
           {esEdicion && (
             <div>
-              <label className="text-sm font-medium text-[#1C1B1A] dark:text-neutral-100">Evidencia en fotos</label>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-[#1C1B1A] dark:text-neutral-100">Evidencia en fotos</label>
+                <label className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-[#B4650F] dark:text-[#F5A623] hover:underline">
+                  <Camera size={14} />
+                  {subiendoFotos ? 'Subiendo...' : 'Añadir más fotos'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    disabled={subiendoFotos}
+                    className="hidden"
+                    onChange={agregarFotos}
+                  />
+                </label>
+              </div>
 
               {cargandoEvidencias && (
                 <p className="mt-1.5 text-xs text-neutral-400 dark:text-neutral-500">Cargando fotos...</p>
               )}
 
-              {!cargandoEvidencias && evidencias.length === 0 && (
+              {!cargandoEvidencias && evidencias.length === 0 && !subiendoFotos && (
                 <p className="mt-1.5 text-xs text-neutral-400 dark:text-neutral-500">No hay fotos registradas para esta moto.</p>
               )}
 
-              {!cargandoEvidencias && evidencias.length > 0 && (
+              {!cargandoEvidencias && (evidencias.length > 0 || subiendoFotos) && (
                 <div className="mt-2 grid grid-cols-4 gap-2">
                   {evidencias.map((evidencia) => (
                     <div key={evidencia.id} className="group relative aspect-square overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-800">
@@ -235,6 +266,11 @@ export default function MotoFormModal({ moto, onGuardar, onCerrar, guardando }) 
                       </button>
                     </div>
                   ))}
+                  {subiendoFotos && (
+                    <div className="flex aspect-square items-center justify-center rounded-md border border-dashed border-neutral-300 dark:border-neutral-700 text-xs text-neutral-400 dark:text-neutral-500">
+                      Subiendo...
+                    </div>
+                  )}
                 </div>
               )}
             </div>
