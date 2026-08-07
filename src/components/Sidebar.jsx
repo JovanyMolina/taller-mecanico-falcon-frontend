@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Bike, Calendar, FileText, Wrench, UserCog, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, Bike, Calendar, FileText, History, UserCog, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
@@ -11,7 +11,8 @@ const NAV_ITEMS = [
   { href: '/motos', label: 'Motos', icon: Bike },
   { href: '/agenda', label: 'Agenda', icon: Calendar },
   { href: '/cotizaciones', label: 'Cotizaciones', icon: FileText },
-  { href: '/ordenes', label: 'Órdenes', icon: Wrench },
+  /* { href: '/ordenes', label: 'Órdenes', icon: Wrench }, */
+  { href: '/historial', label: 'Historial', icon: History },
   { href: '/usuarios', label: 'Usuarios', icon: UserCog, soloAdmin: true },
   { href: '/configuracion', label: 'Configuración', icon: Settings, soloAdmin: true },
 ];

@@ -41,21 +41,14 @@ export default function LoginPage() {
     <div className="flex min-h-screen">
       <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-[#1C1B1A] px-14 py-12 lg:flex">
       {/* marca de agua para el fondo */}
-       {/*  <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0">
           <img
-            src="/Falcon.webp"
+            src="/Falcon-fando.webp"
             alt=""
             aria-hidden="true"
             className="h-full w-full object-cover opacity-10"
           />
-        </div> */}
-        <img
-          src="/Falcon.webp"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 h-[36rem] w-[36rem] rotate-12 object-contain opacity-[0.06]"
-        />
-
+        </div>
         <div className="relative">
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#F5A623]">
             Sistema interno

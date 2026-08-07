@@ -105,7 +105,7 @@ export default function ImprimirCotizacionPage() {
         </div>
 
         <div
-          className={`mt-6 inline-block rounded-md border px-4 py-2 text-sm font-bold ${ESTADO_COLOR[cotizacion.estado]}`}
+          className={`no-imprimir mt-6 inline-block rounded-md border px-4 py-2 text-sm font-bold ${ESTADO_COLOR[cotizacion.estado]}`}
         >
           {ESTADO_LABEL[cotizacion.estado]}
         </div>

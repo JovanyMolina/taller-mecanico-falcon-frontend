@@ -31,4 +31,9 @@ async function cambiarEstado(id, activo) {
   return respuesta.data;
 }
 
-export default { listar, crear, actualizar, cambiarEstado };
+async function obtenerHistorial(id) {
+  const respuesta = await api.get(`/clientes/${id}/historial`);
+  return respuesta.data;
+}
+
+export default { listar, crear, actualizar, cambiarEstado, obtenerHistorial };
