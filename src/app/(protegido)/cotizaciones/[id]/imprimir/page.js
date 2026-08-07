@@ -169,6 +169,13 @@ export default function ImprimirCotizacionPage() {
           </div>
         )}
 
+        {cotizacion.garantia && (
+          <div className="mt-6 border-t border-neutral-200 pt-4">
+            <p className="text-xs uppercase tracking-wide text-neutral-400">Garantía</p>
+            <p className="mt-1 whitespace-pre-line text-sm text-neutral-700">{cotizacion.garantia}</p>
+          </div>
+        )}
+
         <div className="mt-6 flex justify-end border-t border-neutral-200 pt-4">
           <div className="text-right">
             <p className="text-xs uppercase tracking-wide text-neutral-400">Total</p>
@@ -193,6 +200,12 @@ export default function ImprimirCotizacionPage() {
             )}
           </div>
         </div>
+
+        {cotizacion.estado === 'aprobada' && (
+          <p className="mt-8 border-t border-neutral-200 pt-6 text-center text-base font-semibold text-[#1C1B1A]">
+            ¡Gracias por su compra!
+          </p>
+        )}
 
         <p className="no-imprimir mt-10 text-center text-xs text-neutral-400">
           Cotización generada por {cotizacion.creado_por_nombre} — {negocio.nombre}

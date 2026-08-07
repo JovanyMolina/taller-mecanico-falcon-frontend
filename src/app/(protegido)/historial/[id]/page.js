@@ -297,6 +297,13 @@ export default function HistorialClientePage() {
                               </p>
                             )}
 
+                            {cotizacion.garantia && (
+                              <p className="mt-1.5 whitespace-pre-line text-sm text-neutral-600 dark:text-neutral-300">
+                                <span className="font-medium text-neutral-500 dark:text-neutral-400">Garantía: </span>
+                                {cotizacion.garantia}
+                              </p>
+                            )}
+
                             <a
                               href={`/cotizaciones/${cotizacion.id}/imprimir`}
                               target="_blank"

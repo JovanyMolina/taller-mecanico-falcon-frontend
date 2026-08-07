@@ -44,6 +44,7 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
     defaultValues: {
       moto_id: cotizacion?.moto_id || null,
       observaciones: cotizacion?.observaciones || '',
+      garantia: cotizacion?.garantia || '',
       anticipo: cotizacion?.anticipo ?? '',
       items: mapearItems(cotizacion),
     },
@@ -55,6 +56,7 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
     reset({
       moto_id: cotizacion?.moto_id || null,
       observaciones: cotizacion?.observaciones || '',
+      garantia: cotizacion?.garantia || '',
       anticipo: cotizacion?.anticipo ?? '',
       items: mapearItems(cotizacion),
     });
@@ -267,6 +269,30 @@ export default function CotizacionFormModal({ cotizacion, soloLectura, onGuardar
                 />
                 {errors.observaciones && (
                   <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.observaciones.message}</p>
+                )}
+              </>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-[#1C1B1A] dark:text-neutral-100">
+              Garantía <span className="font-normal text-neutral-400 dark:text-neutral-500">(opcional)</span>
+            </label>
+            {soloLectura ? (
+              <p className="mt-1.5 whitespace-pre-line text-sm text-neutral-600 dark:text-neutral-300">
+                {cotizacion?.garantia || 'Sin garantía especificada'}
+              </p>
+            ) : (
+              <>
+                <textarea
+                  rows={2}
+                  placeholder="Ej. 3 meses en mano de obra y 6 meses en refacciones (opcional)"
+                  maxLength={500}
+                  className="mt-1.5 w-full resize-none rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm outline-none focus:border-[#1C1B1A] dark:focus:border-neutral-500 disabled:bg-neutral-50 dark:disabled:bg-neutral-900"
+                  {...register('garantia')}
+                />
+                {errors.garantia && (
+                  <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.garantia.message}</p>
                 )}
               </>
             )}

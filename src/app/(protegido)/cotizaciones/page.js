@@ -79,14 +79,15 @@ export default function CotizacionesPage() {
     }));
 
     const observaciones = datos.observaciones?.trim() || null;
+    const garantia = datos.garantia?.trim() || null;
     const anticipo = datos.anticipo !== '' && datos.anticipo != null ? Number(datos.anticipo) : null;
 
     setGuardando(true);
     try {
       if (cotizacionActiva) {
-        await cotizacionService.actualizar(cotizacionActiva.id, { items, observaciones, anticipo });
+        await cotizacionService.actualizar(cotizacionActiva.id, { items, observaciones, garantia, anticipo });
       } else {
-        await cotizacionService.crear({ moto_id: datos.moto_id, items, observaciones, anticipo });
+        await cotizacionService.crear({ moto_id: datos.moto_id, items, observaciones, garantia, anticipo });
       }
       setModalAbierto(false);
       await cargarCotizaciones();
@@ -145,10 +146,11 @@ export default function CotizacionesPage() {
             className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
           />
         </div>
+
         <select
           value={filtroEstado}
           onChange={(e) => setFiltroEstado(e.target.value)}
-          className="rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-700 outline-none transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
+          className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2.5 text-sm outline-none focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
         >
           <option value="">Todos los estados</option>
           <option value="pendiente">Pendiente</option>
