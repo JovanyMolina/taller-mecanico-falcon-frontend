@@ -168,7 +168,7 @@ export default function OrdenesPage() {
         <select
           value={filtroEstado}
           onChange={(e) => setFiltroEstado(e.target.value)}
-          className="rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-700 outline-none transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
+          className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2.5 text-sm outline-none focus:border-[#1C1B1A] dark:focus:border-neutral-500 focus:ring-1 focus:ring-[#1C1B1A] dark:focus:ring-neutral-500"
         >
           <option value="">Todos los estados</option>
           {Object.entries(ESTADO_LABEL).map(([valor, etiqueta]) => (
@@ -227,11 +227,11 @@ export default function OrdenesPage() {
                       onChange={(e) => cambiarEstado(orden, e.target.value)}
                       className={`rounded-full border-none px-2.5 py-1 text-xs font-medium outline-none ${ESTADO_COLOR[orden.estado]}`}
                     >
-                      <option value={orden.estado} disabled>
+                      <option value={orden.estado} disabled className="bg-white text-neutral-800">
                         {ESTADO_LABEL[orden.estado]}
                       </option>
                       {TRANSICIONES[orden.estado]?.map((siguiente) => (
-                        <option key={siguiente} value={siguiente}>
+                        <option key={siguiente} value={siguiente} className="bg-white text-neutral-800">
                           → {ESTADO_LABEL[siguiente]}
                         </option>
                       ))}

@@ -184,7 +184,6 @@ export default function AgendaPage() {
           {dias.map((dia, index) => {
             const citasDia = citasDelDia(dia);
             const esHoy = formatearISO(dia) === formatearISO(new Date());
-            // No cuenta canceladas: no ocupan espacio real en la operación del día.
             const citasActivas = citasDia.filter((c) => c.estado !== 'cancelada');
 
             return (
@@ -231,11 +230,11 @@ export default function AgendaPage() {
                         onChange={(e) => cambiarEstado(cita, e.target.value)}
                         className={`mt-1.5 w-full rounded-full border-none px-2 py-0.5 text-[10px] font-medium outline-none ${ESTADO_COLOR[cita.estado]}`}
                       >
-                        <option value={cita.estado} disabled>
+                        <option value={cita.estado} disabled className="bg-white text-neutral-800">
                           {ESTADO_LABEL[cita.estado]}
                         </option>
                         {TRANSICIONES[cita.estado]?.map((s) => (
-                          <option key={s} value={s}>
+                          <option key={s} value={s} className="bg-white text-neutral-800">
                             → {ESTADO_LABEL[s]}
                           </option>
                         ))}

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Users, Bike, Calendar, FileText, History, UserCog, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useConfiguracion } from '../context/ConfiguracionContext';
+import { API_ORIGIN } from '../services/api';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -20,13 +22,16 @@ const NAV_ITEMS = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { usuario } = useAuth();
+  const { config } = useConfiguracion();
 
   const items = NAV_ITEMS.filter((item) => !item.soloAdmin || usuario?.rol === 'admin');
+  const logoSrc = config?.logo_url ? `${API_ORIGIN}${config.logo_url}` : '/Falcon.webp';
+  const logoAlt = config?.nombre || 'Taller Motos Falcon';
 
   return (
     <aside  className="hidden w-60 shrink-0 flex-col gap-3 bg-[#1C1B1A] lg:flex">
       <div className="flex justify-center pt-4">
-        <img src="/Falcon.webp" alt="Taller Motos Falcon"  className="h-40 w-auto object-contain" />
+        <img src={logoSrc} alt={logoAlt}  className="h-40 w-auto object-contain" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">

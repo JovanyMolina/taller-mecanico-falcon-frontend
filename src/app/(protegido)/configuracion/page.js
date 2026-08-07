@@ -6,10 +6,10 @@ import Swal from 'sweetalert2';
 import { Upload } from 'lucide-react';
 import configuracionService from '../../../services/configuracion.service';
 import { API_ORIGIN } from '../../../services/api';
+import { useConfiguracion } from '../../../context/ConfiguracionContext';
 
 export default function ConfiguracionPage() {
-  const [config, setConfig] = useState(null);
-  const [cargando, setCargando] = useState(true);
+  const { config, cargando, actualizarConfig } = useConfiguracion();
   const [guardando, setGuardando] = useState(false);
   const [subiendoLogo, setSubiendoLogo] = useState(false);
   const inputArchivoRef = useRef(null);
@@ -21,34 +21,23 @@ export default function ConfiguracionPage() {
     formState: { errors },
   } = useForm();
 
-  async function cargarConfig() {
-    setCargando(true);
-    try {
-      const data = await configuracionService.obtener();
-      setConfig(data);
-      reset({
-        nombre: data.nombre,
-        direccion: data.direccion || '',
-        telefono: data.telefono || '',
-        email: data.email || '',
-        trabaja_domingos: Boolean(data.trabaja_domingos),
-      });
-    } catch (error) {
-      Swal.fire({ icon: 'error', title: 'No se pudo cargar la configuración', text: error.message });
-    } finally {
-      setCargando(false);
-    }
-  }
-
   useEffect(() => {
-    cargarConfig();
-  }, []);
+    if (config) {
+      reset({
+        nombre: config.nombre,
+        direccion: config.direccion || '',
+        telefono: config.telefono || '',
+        email: config.email || '',
+        trabaja_domingos: Boolean(config.trabaja_domingos),
+      });
+    }
+  }, [config, reset]);
 
   async function guardar(datos) {
     setGuardando(true);
     try {
       const actualizado = await configuracionService.actualizar(datos);
-      setConfig(actualizado);
+      actualizarConfig(actualizado);
       Swal.fire({ icon: 'success', title: 'Datos guardados', confirmButtonColor: '#1C1B1A' });
     } catch (error) {
       Swal.fire({ icon: 'error', title: 'No se pudo guardar', text: error.message });
@@ -64,10 +53,10 @@ export default function ConfiguracionPage() {
     setSubiendoLogo(true);
     try {
       const actualizado = await configuracionService.actualizarLogo(archivo);
-      setConfig(actualizado);
+      actualizarConfig(actualizado);
       Swal.fire({ icon: 'success', title: 'Logo actualizado', confirmButtonColor: '#1C1B1A' });
     } catch (error) {
-      Swal.fire({ icon: 'error', title: 'No se pudo subir el logo, revise el tamaño o el formato', text: error.message });
+      Swal.fire({ icon: 'error', title: 'No se pudo subir el logo', text: error.message });
     } finally {
       setSubiendoLogo(false);
       e.target.value = ''; 
@@ -76,6 +65,14 @@ export default function ConfiguracionPage() {
 
   if (cargando) {
     return <p className="text-center text-sm text-neutral-400 dark:text-neutral-500">Cargando configuración...</p>;
+  }
+
+  if (!config) {
+    return (
+      <p className="text-center text-sm text-neutral-400 dark:text-neutral-500">
+        No se pudo cargar la configuración del negocio.
+      </p>
+    );
   }
 
   return (
